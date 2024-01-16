@@ -24,6 +24,12 @@ app.get('/', async (req, res) => {
     BlogPosts
   });
 });
+app.get('/BlogPosts/:id', async (req, res) => {
+  const blogPost = await BlogPost.findById(req.params.id);
+  res.render('post', {
+    blogPost
+  });
+});
 app.get('/about', (req, res) => {
   res.render('about');
 });
