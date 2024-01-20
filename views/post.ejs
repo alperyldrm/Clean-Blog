@@ -17,6 +17,12 @@
             <h2 class="subheading"><%= blogPost.detail %></h2>
             <span class="meta">
               <%= blogPost.dateCreated %></span>
+            <div class="tm-bg-gray tm-share-box">
+								<div class="text-center">
+									<a href="/BlogPosts/edit/<%= blogPost._id %>" class="btn btn-primary p-3 mr-2 mt-3 tm-btn-animate tm-btn-download tm-icon-download"><span>Edit Post</span></a>	
+									<a href="/BlogPosts/<%= blogPost._id %>?_method=DELETE" class="btn btn-danger p-3 ml-2 mt-3 tm-btn-animate tm-btn-download tm-icon-download" onclick="confirm('ARE YOU SURE?')"><span>Delete Post</span></a >	
+								</div>								
+						</div>
           </div>
         </div>
       </div>

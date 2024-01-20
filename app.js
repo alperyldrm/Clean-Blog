@@ -2,12 +2,15 @@ const express = require('express');
 const mongoose = require('mongoose');
 const path = require('path');
 const ejs = require('ejs');
+const methodOverride = require('method-override');
 const BlogPost = require('./models/BlogPost');
+const pageController = require('./controllers/pageController');
+const postController = require('./controllers/postController');
 
 const app = express();
 
 //connect db
-mongoose.connect('mongodb://localhost/clean-blog-db')
+mongoose.connect('mongodb://localhost/clean-blog-db');
 
 //Template Engine
 app.set('view engine', 'ejs');
@@ -16,38 +19,23 @@ app.set('view engine', 'ejs');
 app.use(express.static('public'));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+app.use(methodOverride('_method',
+{
+  methods:['POST', 'GET']
+}));
 
 //ROUTES
-app.get('/', async (req, res) => {
-  const BlogPosts = await BlogPost.find({})
-  res.render('index', {
-    BlogPosts
-  });
-});
-app.get('/BlogPosts/:id', async (req, res) => {
-  const blogPost = await BlogPost.findById(req.params.id);
-  res.render('post', {
-    blogPost
-  });
-});
-app.get('/about', (req, res) => {
-  res.render('about');
-});
-app.get('/add_post', (req, res) => {
-  res.render('add_post');
-});
-app.get('/post', (req, res) => {
-  res.render('post');
-});
-
-app.post('/BlogPosts', async(req, res) => {
-  await BlogPost.create(req.body)
-  res.redirect('/')
-});
+app.get('/about', pageController.getAboutPage);
+app.get('/add_post', pageController.getAddPage);
+app.get('/', postController.getAllPosts);
+app.get('/BlogPosts/:id', postController.getPost);
+app.post('/BlogPosts', postController.getCreatePost);
+app.get('/BlogPosts/edit/:id', postController.getEditPost);
+app.put('/BlogPosts/:id', postController.putUpdatePost);
+app.delete('/BlogPosts/:id', postController.deletePost);
 
 //PORT
 const port = 5000;
-
 app.listen(port, () => {
   console.log(`Sunucu belirtilen portta calisti: ${port}`);
 });
